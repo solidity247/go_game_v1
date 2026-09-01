@@ -1,7 +1,7 @@
 package world
 
 type World struct {
-	maps map[string]*Location
+	locations map[string]*Location
 }
 
 func New() *World {
@@ -11,12 +11,12 @@ func New() *World {
 }
 
 func (w *World) GetLocation(locName string) *Location {
-	val, ok := w.maps[locName]
+	val, ok := w.locations[locName]
 	if ok {
 		return val
 	}
 	val = loadLocation(locName)
-	w.maps[locName] = val
+	w.locations[locName] = val
 	return val
 }
 

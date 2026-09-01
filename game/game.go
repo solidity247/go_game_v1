@@ -61,9 +61,9 @@ func (g *Game) getCommand(message string) ([]string, error) {
 func (g *Game) RunCommand(commands ...string) string {
 	switch commands[0] {
 	case lookAround: // осмотреться ()
-		return handleLookAround(g.player.CurrentLocation)
+		return g.handleLookAround()
 	case goTo: // идти <route>
-		return handleGoToLocation(commands[1])
+		return g.handleGoToLocation(commands[1])
 	case wear: // надеть <item>
 		// need second arg Item
 		return commands[0]
@@ -81,7 +81,8 @@ func (g *Game) RunRawCommand(inp string) string {
 	return g.RunCommand(subCommands...)
 }
 
-func handleLookAround(l *world.Location) string {
+func (g *Game) handleLookAround() string {
+	l := g.player.CurrentLocation
 	manifest := l.Manifest
 	items := renderItems(&l.Items)
 	todos := l.Todos
@@ -90,8 +91,19 @@ func handleLookAround(l *world.Location) string {
 	return fmt.Sprintf("%s. %s", strings.Join([]string{manifest, items, todos}, ", "), avaliableRoutes)
 }
 
-func handleGoToLocation(destination string) string {
-	return destination
+func (g *Game) handleGoToLocation(destination string) string {
+	if !world.IsValidPath(destination) {
+		return ""
+	}
+	canGo, reason := g.player.CurrentLocation.CanGoTo(destination)
+	// fmt.Println("handleGoToLocation", destination, canGo, reason)
+	if !canGo {
+		return reason
+	}
+
+	g.player.GoTo(g.world.GetLocation(destination))
+
+	return renderArrivalMessage(g.player.CurrentLocation)
 }
 
 func renderItems(items *[]map[string][]string) string {
@@ -105,4 +117,8 @@ func renderItems(items *[]map[string][]string) string {
 		}
 	}
 	return res
+}
+
+func renderArrivalMessage(l *world.Location) string {
+	return fmt.Sprintf("%s. %s", l.WelcomeMessage, l.GetAvaliableRoutes())
 }

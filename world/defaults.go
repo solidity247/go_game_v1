@@ -2,56 +2,50 @@ package world
 
 func createKitchen() *Location {
 	return &Location{
-		Id:              "kitchen",
 		Title:           "кухня",
 		Items:           []map[string][]string{{"на столе": []string{"чай"}}},
 		AvaliableRoutes: []string{"коридор"},
 		Todos:           "надо собрать рюкзак и идти в универ",
-		Interests:       "кухня, ничего интересного",
+		WelcomeMessage:  "кухня, ничего интересного",
 		Manifest:        "ты находишься на кухне",
 	}
 }
 
 func createCorridor() *Location {
 	return &Location{
-		Id:    "corridor",
-		Title: "коридор",
-		// Items: []map[string][]string{},
+		Title:           "коридор",
 		AvaliableRoutes: []string{"кухня", "комната", "улица"},
-		Todos:           "надо собрать рюкзак и идти в универ",
-		Interests:       "кухня, ничего интересного",
+		WelcomeMessage:  "ничего интересного",
+		Manifest:        "ничего интересного",
+		Door:            Door{"улица", true},
 	}
 }
 
 func createRoom() *Location {
 	return &Location{
-		// Id: "room",
-		// Title: "коридор",
-		// Items: []map[string][]string{},
-		// AvaliableRoutes:					[]string{"кухня", "комната", "улица"},
+		Title:           "комната",
+		Items:           []map[string][]string{{"на столе": []string{"чай"}}},
+		AvaliableRoutes: []string{"коридор"},
 		// Todos: "надо собрать рюкзак и идти в универ",
-		// Interests: "кухня, ничего интересного",
+		WelcomeMessage: "ты в своей комнате",
 	}
 }
 
 func createStreet() *Location {
 	return &Location{
-		// Id: "room",
-		// Title: "коридор",
-		// Items: []map[string][]string{},
-		// AvaliableRoutes:					[]string{"кухня", "комната", "улица"},
+		Title:           "улица",
+		AvaliableRoutes: []string{"домой"},
 		// Todos: "надо собрать рюкзак и идти в универ",
-		// Interests: "кухня, ничего интересного",
+		WelcomeMessage: "на улице весна",
 	}
 }
 
 func createHouse() *Location {
 	return &Location{
-		// Id: "room",
-		// Title: "коридор",
+		// Title: "домой",
 		// Items: []map[string][]string{},
-		// AvaliableRoutes:					[]string{"кухня", "комната", "улица"},
+		AvaliableRoutes: []string{"улица"},
 		// Todos: "надо собрать рюкзак и идти в универ",
-		// Interests: "кухня, ничего интересного",
+		// WelcomeMessage: "кухня, ничего интересного",
 	}
 }
