@@ -2,13 +2,13 @@ package world
 
 func createKitchen() *Location {
 	return &Location{
-		Id:								"kitchen",
-		Title:						"кухня",
-		Items:						[]map[string][]string{{"на столе": []string{"чай"}}},
-		AvaliableRoutes:	[]string{"коридор"},
-		Todos:						"надо собрать рюкзак и идти в универ",
-		Interests:				"кухня, ничего интересного",
-		Manifest: 				"ты находишься на кухне",
+		Id:              "kitchen",
+		Title:           "кухня",
+		Items:           []map[string][]string{{"на столе": []string{"чай"}}},
+		AvaliableRoutes: []string{"коридор"},
+		Todos:           "надо собрать рюкзак и идти в универ",
+		Interests:       "кухня, ничего интересного",
+		Manifest:        "ты находишься на кухне",
 	}
 }
 

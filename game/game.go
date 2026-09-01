@@ -14,19 +14,19 @@ import (
 type Game struct {
 	scanner *bufio.Scanner
 	player  *player.Player
-	world		*world.World
+	world   *world.World
 }
 
 func New() *Game {
 	scanner := bufio.NewScanner(os.Stdin)
-	w :=	world.New()
+	w := world.New()
 	p := player.New()
 	p.GoTo(w.GetLocation("кухня"))
 
 	game := Game{
-		scanner:	scanner,
-		player:		p,
-		world:		w,
+		scanner: scanner,
+		player:  p,
+		world:   w,
 	}
 	return &game
 }
@@ -58,19 +58,19 @@ func (g *Game) getCommand(message string) ([]string, error) {
 	return vals, errors.New("WTF are you typing?")
 }
 
-func (g *Game) RunCommand(command ...string) string {
-	switch command[0] {
+func (g *Game) RunCommand(commands ...string) string {
+	switch commands[0] {
 	case lookAround: // осмотреться ()
-		return takeAlookAround(g.player.CurrentLocation)
+		return handleLookAround(g.player.CurrentLocation)
 	case goTo: // идти <route>
-		return command[0]
+		return handleGoToLocation(commands[1])
 	case wear: // надеть <item>
 		// need second arg Item
-		return command[0]
+		return commands[0]
 	case take: // взять <item>
-		return command[0]
+		return commands[0]
 	case apply: // применить <item> -> <object>
-		return command[0]
+		return commands[0]
 	default:
 		return "неизвестная команда"
 	}
@@ -81,19 +81,23 @@ func (g *Game) RunRawCommand(inp string) string {
 	return g.RunCommand(subCommands...)
 }
 
-func takeAlookAround(l *world.Location) string {
+func handleLookAround(l *world.Location) string {
 	manifest := l.Manifest
 	items := renderItems(&l.Items)
 	todos := l.Todos
 	avaliableRoutes := l.GetAvaliableRoutes()
-		
+
 	return fmt.Sprintf("%s. %s", strings.Join([]string{manifest, items, todos}, ", "), avaliableRoutes)
 }
 
-func renderItems (items *[]map[string][]string) string {
+func handleGoToLocation(destination string) string {
+	return destination
+}
+
+func renderItems(items *[]map[string][]string) string {
 	res := ""
 	if items == nil {
-		return  res
+		return res
 	}
 	for _, obj := range *items {
 		for name, itms := range obj {

@@ -11,6 +11,6 @@ func New() *Player {
 	return &Player{}
 }
 
-func (p *Player) GoTo (l *world.Location) {
+func (p *Player) GoTo(l *world.Location) {
 	p.CurrentLocation = l
 }

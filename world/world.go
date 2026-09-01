@@ -36,4 +36,3 @@ func loadLocation(l string) *Location {
 		return &Location{}
 	}
 }
-

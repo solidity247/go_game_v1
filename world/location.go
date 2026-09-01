@@ -12,7 +12,7 @@ type Location struct {
 	Todos           string
 	AvaliableRoutes []string
 	Interests       string
-	Manifest				string
+	Manifest        string
 }
 
 func (l *Location) RenderArrival() {
