@@ -45,6 +45,10 @@ func (ro *RoomObj) Render() string {
 	return fmt.Sprintf("%s: %s", ro.name, strings.Join((ro.content), ", "))
 }
 
+func (ro *RoomObj) IsEmpty() bool {
+	return len(ro.content) == 0
+}
+
 func createStreet() *Location {
 	return &Location{
 		Title:           "улица",

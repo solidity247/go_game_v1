@@ -113,9 +113,13 @@ func renderRoomObjects(items *[]world.RoomObj) string {
 	}
 	objs := make([]string, len(*items))
 	for i, v := range *items {
-		objs[i] = v.Render()
+		if v.IsEmpty() {
+			objs[i] = ""	
+		} else {
+			objs[i] = v.Render()
+		}
 	}
-	return strings.Join(objs, ", ")
+	return joinValues(", ", objs...)
 }
 
 
