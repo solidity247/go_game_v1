@@ -10,7 +10,7 @@ type Location struct {
 	Id              string
 	Title           string
 	Items           []RoomObj
-	Todos           string
+	ShowTodo        bool
 	AvaliableRoutes []string
 	WelcomeMessage  string
 	Manifest        string
@@ -51,4 +51,14 @@ func (l *Location) CanGoTo(path string) (bool, string) {
 		return false, "дверь закрыта"
 	}
 	return true, ""
+}
+
+func (l *Location) TakeItem(item string) bool {
+	for _, obj := range l.Items {
+		if obj.Has(item) {
+			obj.TakeOutItem(item)
+			return true
+		}
+	}
+	return false
 }

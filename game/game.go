@@ -66,8 +66,7 @@ func (g *Game) RunCommand(commands ...string) string {
 	case goTo: // идти <route>
 		return g.handleGoToLocation(commands[1])
 	case wear: // надеть <item>
-		// need second arg Item
-		return commands[0]
+		return g.handleWearItem(commands[1])
 	case take: // взять <item>
 		return commands[0]
 	case apply: // применить <item> -> <object>
@@ -86,7 +85,10 @@ func (g *Game) handleLookAround() string {
 	l := g.player.CurrentLocation
 	manifest := l.Manifest
 	items := renderRoomObjects(&l.Items)
-	todos := l.Todos
+	var todos string
+	if l.ShowTodo {
+		todos = g.player.Todos.All()
+	}
 	avaliableRoutes := l.GetAvaliableRoutes()
 
 	return fmt.Sprintf("%s. %s", joinValues(", ", manifest, items, todos), avaliableRoutes)
@@ -97,7 +99,6 @@ func (g *Game) handleGoToLocation(destination string) string {
 		return ""
 	}
 	canGo, reason := g.player.CurrentLocation.CanGoTo(destination)
-	// fmt.Println("handleGoToLocation", destination, canGo, reason)
 	if !canGo {
 		return reason
 	}
@@ -114,14 +115,13 @@ func renderRoomObjects(items *[]world.RoomObj) string {
 	objs := make([]string, len(*items))
 	for i, v := range *items {
 		if v.IsEmpty() {
-			objs[i] = ""	
+			objs[i] = ""
 		} else {
 			objs[i] = v.Render()
 		}
 	}
 	return joinValues(", ", objs...)
 }
-
 
 func renderArrivalMessage(l *world.Location) string {
 	return fmt.Sprintf("%s. %s", l.WelcomeMessage, l.GetAvaliableRoutes())
@@ -130,11 +130,21 @@ func renderArrivalMessage(l *world.Location) string {
 func joinValues(delimiter string, values ...string) string {
 	vals := slices.Collect(func(yield func(string) bool) {
 		for _, v := range values {
-			if v == "" {continue}
-			if!yield(v){
+			if v == "" {
+				continue
+			}
+			if !yield(v) {
 				return
 			}
 		}
 	})
 	return strings.Join(vals, delimiter)
+}
+
+func (g *Game) handleWearItem(item string) string {
+	if g.player.CurrentLocation.TakeItem(item) {
+		g.player.Todos.Complete("собрать рюкзак")
+		return "вы надели: рюкзак"
+	}
+	return "нет такого"
 }

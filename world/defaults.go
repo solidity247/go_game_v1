@@ -2,15 +2,16 @@ package world
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
 func createKitchen() *Location {
 	return &Location{
 		Title:           "кухня",
-		Items:           []RoomObj{{"на столе", []string{"чай"}}},
+		Items:           []RoomObj{{"на столе", &[]string{"чай"}}},
 		AvaliableRoutes: []string{"коридор"},
-		Todos:           "надо собрать рюкзак и идти в универ",
+		ShowTodo:        true,
 		WelcomeMessage:  "кухня, ничего интересного",
 		Manifest:        "ты находишься на кухне",
 	}
@@ -29,24 +30,11 @@ func createCorridor() *Location {
 func createRoom() *Location {
 	return &Location{
 		Title:           "комната",
-		Items:           []RoomObj{{"на столе", []string{"ключи", "конспекты"}}, {"на стуле", []string{"рюкзак"}}},
+		Items:           []RoomObj{{"на столе", &[]string{"ключи", "конспекты"}}, {"на стуле", &[]string{"рюкзак"}}},
 		AvaliableRoutes: []string{"коридор"},
 		// Todos: "надо собрать рюкзак и идти в универ",
 		WelcomeMessage: "ты в своей комнате",
 	}
-}
-
-type RoomObj struct {
-	name string
-	content []string
-}
-
-func (ro *RoomObj) Render() string {
-	return fmt.Sprintf("%s: %s", ro.name, strings.Join((ro.content), ", "))
-}
-
-func (ro *RoomObj) IsEmpty() bool {
-	return len(ro.content) == 0
 }
 
 func createStreet() *Location {
@@ -66,4 +54,27 @@ func createHouse() *Location {
 		// Todos: "надо собрать рюкзак и идти в универ",
 		// WelcomeMessage: "кухня, ничего интересного",
 	}
+}
+
+type RoomObj struct {
+	name    string
+	content *[]string
+}
+
+func (ro *RoomObj) Render() string {
+	return fmt.Sprintf("%s: %s", ro.name, strings.Join((*ro.content), ", "))
+}
+
+func (ro *RoomObj) IsEmpty() bool {
+	return len(*ro.content) == 0
+}
+
+func (ro *RoomObj) Has(item string) bool {
+	return slices.Contains(*ro.content, item)
+}
+
+func (ro *RoomObj) TakeOutItem(item string) {
+	*ro.content = slices.DeleteFunc(*ro.content, func(s string) bool {
+		return s == item
+	})
 }
