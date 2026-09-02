@@ -1,9 +1,14 @@
 package world
 
+import (
+	"fmt"
+	"strings"
+)
+
 func createKitchen() *Location {
 	return &Location{
 		Title:           "кухня",
-		Items:           []map[string][]string{{"на столе": []string{"чай"}}},
+		Items:           []RoomObj{{"на столе", []string{"чай"}}},
 		AvaliableRoutes: []string{"коридор"},
 		Todos:           "надо собрать рюкзак и идти в универ",
 		WelcomeMessage:  "кухня, ничего интересного",
@@ -24,11 +29,20 @@ func createCorridor() *Location {
 func createRoom() *Location {
 	return &Location{
 		Title:           "комната",
-		Items:           []map[string][]string{{"на столе": []string{"чай"}}},
+		Items:           []RoomObj{{"на столе", []string{"ключи", "конспекты"}}, {"на стуле", []string{"рюкзак"}}},
 		AvaliableRoutes: []string{"коридор"},
 		// Todos: "надо собрать рюкзак и идти в универ",
 		WelcomeMessage: "ты в своей комнате",
 	}
+}
+
+type RoomObj struct {
+	name string
+	content []string
+}
+
+func (ro *RoomObj) Render() string {
+	return fmt.Sprintf("%s: %s", ro.name, strings.Join((ro.content), ", "))
 }
 
 func createStreet() *Location {

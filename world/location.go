@@ -9,7 +9,7 @@ import (
 type Location struct {
 	Id              string
 	Title           string
-	Items           []map[string][]string
+	Items           []RoomObj
 	Todos           string
 	AvaliableRoutes []string
 	WelcomeMessage  string

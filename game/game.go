@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/solidity247/go_game_v1/player"
@@ -84,11 +85,11 @@ func (g *Game) RunRawCommand(inp string) string {
 func (g *Game) handleLookAround() string {
 	l := g.player.CurrentLocation
 	manifest := l.Manifest
-	items := renderItems(&l.Items)
+	items := renderRoomObjects(&l.Items)
 	todos := l.Todos
 	avaliableRoutes := l.GetAvaliableRoutes()
 
-	return fmt.Sprintf("%s. %s", strings.Join([]string{manifest, items, todos}, ", "), avaliableRoutes)
+	return fmt.Sprintf("%s. %s", joinValues(", ", manifest, items, todos), avaliableRoutes)
 }
 
 func (g *Game) handleGoToLocation(destination string) string {
@@ -106,19 +107,30 @@ func (g *Game) handleGoToLocation(destination string) string {
 	return renderArrivalMessage(g.player.CurrentLocation)
 }
 
-func renderItems(items *[]map[string][]string) string {
-	res := ""
+func renderRoomObjects(items *[]world.RoomObj) string {
 	if items == nil {
-		return res
+		return ""
 	}
-	for _, obj := range *items {
-		for name, itms := range obj {
-			res += fmt.Sprintf("%s: %s", name, strings.Join(itms, ", "))
-		}
+	objs := make([]string, len(*items))
+	for i, v := range *items {
+		objs[i] = v.Render()
 	}
-	return res
+	return strings.Join(objs, ", ")
 }
+
 
 func renderArrivalMessage(l *world.Location) string {
 	return fmt.Sprintf("%s. %s", l.WelcomeMessage, l.GetAvaliableRoutes())
+}
+
+func joinValues(delimiter string, values ...string) string {
+	vals := slices.Collect(func(yield func(string) bool) {
+		for _, v := range values {
+			if v == "" {continue}
+			if!yield(v){
+				return
+			}
+		}
+	})
+	return strings.Join(vals, delimiter)
 }
