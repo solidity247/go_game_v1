@@ -137,6 +137,7 @@ func (d *Door) Unlock() {
 
 func (d *Door) Use(item string) string {
 	if item == "ключи" {
+		d.Unlock()
 		return "дверь открыта"
 	}
 	return ""
