@@ -12,8 +12,8 @@ func createKitchen() *Location {
 		Items:           []RoomObj{{"на столе", &[]string{"чай"}}},
 		AvaliableRoutes: []string{"коридор"},
 		showTodo:        true,
-		WelcomeMessage: "кухня, ничего интересного",
-		Manifest:       "ты находишься на кухне",
+		WelcomeMessage:  "кухня, ничего интересного",
+		Manifest:        "ты находишься на кухне",
 	}
 }
 
@@ -22,7 +22,7 @@ func createCorridor() *Location {
 		AvaliableRoutes: []string{"кухня", "комната", "улица"},
 		WelcomeMessage:  "ничего интересного",
 		Manifest:        "ничего интересного",
-		Door:            Door{"улица", true},
+		Door:            Door{true, "улица", true},
 	}
 }
 

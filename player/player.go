@@ -71,3 +71,7 @@ func (b *BackPack) IsActive() bool {
 func (b *BackPack) Store(item string) {
 	b.Items = append(b.Items, item)
 }
+
+func (b *BackPack) HasItem(item string) bool {
+	return slices.Contains(b.Items, item)
+}

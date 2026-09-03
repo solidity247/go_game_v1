@@ -69,7 +69,7 @@ func (g *Game) RunCommand(commands ...string) string {
 	case take: // взять <item>
 		return g.handleTakeItem(commands[1])
 	case apply: // применить <item> -> <object>
-		return commands[0]
+		return g.handleApplyItem(commands[1], commands[2])
 	default:
 		return "неизвестная команда"
 	}

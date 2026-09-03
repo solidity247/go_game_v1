@@ -18,6 +18,7 @@ type GamingLocation interface {
 	HasItem(item string) bool
 	HasNoItems() bool
 	TakeItem(item string) bool
+	UtilizeItem(string, string) string
 }
 
 type Location struct {
@@ -45,7 +46,7 @@ func (r *MyRoom) RenderObjects() string {
 	return r.Location.RenderObjects()
 }
 
-func (l *Location) ShowTodo() bool{
+func (l *Location) ShowTodo() bool {
 	return l.showTodo
 }
 
@@ -115,13 +116,28 @@ func (l *Location) TakeItem(item string) bool {
 	return false
 }
 
+func (l *Location) UtilizeItem(item, subj string) string {
+	if subj == "дверь" && l.Door.IsReal {
+		return l.Door.Use(item)
+	}
+	return "не к чему применить"
+}
+
 // Just keep this small object //
 
 type Door struct {
+	IsReal   bool
 	toPath   string
 	isLocked bool
 }
 
 func (d *Door) Unlock() {
 	d.isLocked = false
+}
+
+func (d *Door) Use(item string) string {
+	if item == "ключи" {
+		return "дверь открыта"
+	}
+	return ""
 }

@@ -55,3 +55,10 @@ func (g *Game) handleTakeItem(item string) string {
 		return fmt.Sprintf("предмет добавлен в инвентарь: %s", item)
 	}
 }
+
+func (g *Game) handleApplyItem(item, subject string) string {
+	if !g.player.BackPack.HasItem(item) {
+		return fmt.Sprintf("нет предмета в инвентаре - %s", item)
+	}
+	return g.player.CurrentLocation.UtilizeItem(item, subject)
+}
