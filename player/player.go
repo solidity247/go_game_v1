@@ -8,19 +8,28 @@ import (
 )
 
 type Player struct {
-	CurrentLocation *world.Location
-	BackPack        *[]string
+	CurrentLocation world.GamingLocation
+	BackPack        *BackPack
 	Todos           Todos
 }
 
 func New() *Player {
 	return &Player{
-		Todos: Todos{[]string{"собрать рюкзак", "идти в универ"}},
+		BackPack: &BackPack{},
+		Todos:    Todos{[]string{"собрать рюкзак", "идти в универ"}},
 	}
 }
 
-func (p *Player) GoTo(l *world.Location) {
+func (p *Player) GoTo(l world.GamingLocation) {
 	p.CurrentLocation = l
+}
+
+func (p *Player) WearBackPack() {
+	p.BackPack.Activate()
+}
+
+func (p *Player) GrabItem(item string) {
+	p.BackPack.Store(item)
 }
 
 type Todos struct {
@@ -44,4 +53,21 @@ func (t *Todos) Complete(task string) {
 
 func (t *Todos) All() string {
 	return "надо " + strings.Join(t.todos, " и ")
+}
+
+type BackPack struct {
+	Items  []string
+	active bool
+}
+
+func (b *BackPack) Activate() {
+	b.active = true
+}
+
+func (b *BackPack) IsActive() bool {
+	return b.active
+}
+
+func (b *BackPack) Store(item string) {
+	b.Items = append(b.Items, item)
 }

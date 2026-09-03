@@ -1,16 +1,16 @@
 package world
 
 type World struct {
-	locations map[string]*Location
+	locations map[string]GamingLocation
 }
 
 func New() *World {
 	return &World{
-		make(map[string]*Location),
+		make(map[string]GamingLocation),
 	}
 }
 
-func (w *World) GetLocation(locName string) *Location {
+func (w *World) GetLocation(locName string) GamingLocation {
 	val, ok := w.locations[locName]
 	if ok {
 		return val
@@ -20,7 +20,7 @@ func (w *World) GetLocation(locName string) *Location {
 	return val
 }
 
-func loadLocation(l string) *Location {
+func loadLocation(l string) GamingLocation {
 	switch l {
 	case "кухня":
 		return createKitchen()
